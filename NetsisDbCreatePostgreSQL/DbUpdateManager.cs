@@ -29,6 +29,31 @@ namespace NetsisDbCreatePostgreSQL
 
         }
 
+        public void ResetDatabase()
+        {
+            PostgreConn = GetConncetion("postgres");
+            
+            ExecuteCommand("DROP DATABASE IF EXISTS NETSIS WITH (FORCE)"); FireEvent($" DROP DATABASE NETSIS ");            
+            
+            ExecuteCommand("CREATE DATABASE NETSIS"); FireEvent($" CREATE DATABASE NETSIS ");
+            
+            ExecuteCommand("DROP DATABASE IF EXISTS SIRKETDB WITH (FORCE) "); FireEvent($" DROP DATABASE SIRKETDB ");
+
+            ExecuteCommand("CREATE DATABASE SIRKETDB"); FireEvent($" CREATE DATABASE SIRKETDB ");
+
+
+            foreach (var item in DbUpdateNewList)
+            {
+                item.PostgreConverted = false;
+                item.PostgreError = "";
+                item.PostgreSQL = "";
+            }
+
+
+        }
+
+
+
         private void FireEvent(string _msg)
         {
             if (OnLog != null)
@@ -37,40 +62,43 @@ namespace NetsisDbCreatePostgreSQL
             }
         }
 
-        public void CreateNetsisDbOjects()
+        public void CreateNetsisDbOjects(ObjectType[] arr)
         {
 
-            PostgreConn = GetConncetion("NETSIS");
-            foreach (var _objType in (ObjectType[])Enum.GetValues(typeof(ObjectType)))
+            PostgreConn = GetConncetion("netsis");
+            foreach (var _objType in arr)
             {
                 var SQLList = GetFilteredData(WhichDB.Netsis, _objType);
 
-                
+
                 FireEvent($" NETSIS Db üzerinde  {Enum.GetName(typeof(ObjectType), _objType) }  Tipinde ki Cümleler çalışıyor ");
                 Thread.Sleep(200);
                 GenerateAndExecutePostgreSQLQuery(SQLList);
-                FireEvent($"  {SQLList.Count(x => x.PostgreConverted)}  / {SQLList.Count()} ");
+                FireEvent($" Başarılı Çalıştıralan DbUpdate Cumle ({Enum.GetName(typeof(ObjectType), _objType) }) sayısı:{SQLList.Count(x => x.PostgreConverted)}/{SQLList.Count()} ");
             }
 
-            File.WriteAllText("DbUpdateNew.json", JsonConvert.SerializeObject(DbUpdateNewList));
+            SaveAll();
 
-           
         }
 
-        public void CreateSIRKETDBDbOjects()
+        private void SaveAll()
+        {
+            File.WriteAllText("DbUpdateNew.json", JsonConvert.SerializeObject(DbUpdateNewList));
+        }
+
+        public void CreateSIRKETDBDbOjects(ObjectType[] arr)
         {
 
-            PostgreConn = GetConncetion("SIRKETDB");
-            foreach (var _objType in (ObjectType[])Enum.GetValues(typeof(ObjectType)))
+            PostgreConn = GetConncetion("sirketdb");
+            foreach (var _objType in arr)
             {
                 var SQLList = GetFilteredData(WhichDB.Entity, _objType);
                 FireEvent($" SIRKETDB Db üzerinde  {Enum.GetName(typeof(ObjectType), _objType) }  Tipinde ki Cümleler çalışıyor ");
                 Thread.Sleep(200);
                 GenerateAndExecutePostgreSQLQuery(SQLList);
-
-                FireEvent($"  {SQLList.Count(x => x.PostgreConverted)}  / {SQLList.Count()} ");
+                FireEvent($" Başarılı Çalıştıralan DbUpdate Cumle ({Enum.GetName(typeof(ObjectType), _objType) }) sayısı:{SQLList.Count(x => x.PostgreConverted)}/{SQLList.Count()} ");
             }
-            File.WriteAllText("DbUpdateNew.json", JsonConvert.SerializeObject(DbUpdateNewList));
+            SaveAll();
         }
 
         private void GenerateAndExecutePostgreSQLQuery(List<DBNewItem> SQLList)
@@ -98,7 +126,7 @@ namespace NetsisDbCreatePostgreSQL
             }
         }
 
-        private NpgsqlConnection GetConncetion(string dbname = "NETSIS")
+        private NpgsqlConnection GetConncetion(string dbname = "netsis")
         {
             var connectionString = "Host =localhost;Username=postgres;Password=postgres;Database=" + dbname;
             var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
