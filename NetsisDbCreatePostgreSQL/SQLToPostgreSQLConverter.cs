@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace NetsisDbCreatePostgreSQL
 {
@@ -152,7 +146,11 @@ namespace NetsisDbCreatePostgreSQL
             sqlScript = Regex.Replace(sqlScript, "CHAR\\((\\d+)\\)", "CHAR($1)", RegexOptions.IgnoreCase);
             sqlScript = Regex.Replace(sqlScript, "NCHAR\\((\\d+)\\)", "CHAR($1)", RegexOptions.IgnoreCase);
             sqlScript = Regex.Replace(sqlScript, "DECIMAL\\((\\d+),\\s?(\\d+)\\)", "DECIMAL($1, $2)", RegexOptions.IgnoreCase);
+            sqlScript = Regex.Replace(sqlScript, @"\bBIT\s+DEFAULT\s*\(\s*0\s*\)", "BOOLEAN DEFAULT FALSE");
             sqlScript = Regex.Replace(sqlScript, @"\bBIT\b", "BOOLEAN", RegexOptions.IgnoreCase);
+            
+
+
             sqlScript = Regex.Replace(sqlScript, @"\bTINYINT\b", "SMALLINT", RegexOptions.IgnoreCase);
 
             sqlScript = Regex.Replace(sqlScript, @"\bSMALLDATETIME\b", "TIMESTAMP", RegexOptions.IgnoreCase);

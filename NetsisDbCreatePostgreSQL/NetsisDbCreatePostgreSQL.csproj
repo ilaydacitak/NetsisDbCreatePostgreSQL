@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{721F5844-12FF-4198-A202-0AAE959414E9}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>NetsisDbCretaePostgreSQL</RootNamespace>
-    <AssemblyName>NetsisDbCretaePostgreSQL</AssemblyName>
+    <RootNamespace>NetsisDbCreatePostgreSQL</RootNamespace>
+    <AssemblyName>NetsisDbCreatePostgreSQL</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -94,6 +94,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbUpdateManager.cs" />
     <Compile Include="SQLToPostgreSQLConverter.cs" />
     <Compile Include="DbNewItem.cs" />
     <Compile Include="Enums.cs" />
