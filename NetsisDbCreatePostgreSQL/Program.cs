@@ -14,8 +14,8 @@ namespace NetsisDbCreatePostgreSQL
             mng.OnLog += X_OnLog;
             mng.ResetDatabase();
             ObjectType[] ObjectArg = {
-                                        ObjectType.Table 
-                                        //,ObjectType.Index 
+                                        ObjectType.Table,
+                                        ObjectType.Index 
                                         //,ObjectType.View 
                                         //,ObjectType.SPSF 
                                         //,ObjectType.Synonym 
@@ -25,8 +25,8 @@ namespace NetsisDbCreatePostgreSQL
                                         //,ObjectType.InstallRecord   
                                     };
 
-            mng.CreateNetsisDbOjects(ObjectArg);
-         //   x.CreateSIRKETDBDbOjects(ObjectArg);
+            //mng.CreateNetsisDbOjects(ObjectArg);
+            mng.CreateSIRKETDBDbOjects(ObjectArg);
             Console.ReadLine();
         }
 

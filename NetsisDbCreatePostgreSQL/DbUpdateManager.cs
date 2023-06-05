@@ -128,7 +128,7 @@ namespace NetsisDbCreatePostgreSQL
 
         private NpgsqlConnection GetConncetion(string dbname = "netsis")
         {
-            var connectionString = "Host =localhost;Username=postgres;Password=postgres;Database=" + dbname;
+            var connectionString = "Host =localhost;Username=postgres;Password=3445;Database=" + dbname;
             var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
             var dataSource = dataSourceBuilder.Build();
             return dataSource.OpenConnection();
